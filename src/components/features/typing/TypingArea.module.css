@@ -1,0 +1,90 @@
+.container {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    line-height: 1.6;
+    max-width: 900px;
+    margin: 0 auto;
+    user-select: none;
+}
+
+.textDisplay {
+    color: var(--text-muted);
+    position: relative;
+    word-break: break-word;
+    padding: 2rem;
+    background: var(--glass-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    min-height: 200px;
+}
+
+.char {
+    position: relative;
+    transition: color 0.1s;
+}
+
+.correct {
+    color: var(--text-primary);
+    text-shadow: 0 0 5px var(--accent-primary);
+}
+
+.incorrect {
+    color: var(--error);
+    text-decoration: underline;
+    text-decoration-color: var(--error);
+}
+
+.current {
+    border-left: 2px solid var(--accent-primary);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        border-color: transparent;
+    }
+
+    50% {
+        border-color: var(--accent-primary);
+    }
+}
+
+.inputHidden {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+    z-index: 10;
+}
+
+.stats {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.statValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+.statLabel {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
