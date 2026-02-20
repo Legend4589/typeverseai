@@ -2,6 +2,11 @@
 
 import { useMemo, useState, useEffect, useRef } from 'react';
 
+interface KeystrokeLog {
+    char: string;
+    timestamp: number;
+}
+
 // Common words for testing "AI" generation (mock for now)
 const DEFAULT_WORDS = "the quick brown fox jumps over the lazy dog typists are awesome developers code fast react nextjs typescript ai machine learning keyboard speed user experience interface design performance optimization database connection security cloud computing algorithm structure function loop variable constant object array string number boolean null undefined symbol promise async await try catch error handling debugging testing deployment serverless function api graphql rest json yaml xml html css sass less stylus tailwind bootstrap foundation materialize chakra ant design semantic ui bulma pure uikit milligram spectre picnic skeleton tacony robertson phillips slot torx allen hex spline triple square bristol double hex pentalobe polydrive one-way clutch security torx security hex tri-wing torq-set spanner grub screw set screw shoulder screw thumb machine wood sheet metal concrete masonry drywall lag bolt carriage elevator plow track hanger eye stud anchor toggle molly plastic rawlplug fibre lead resin chemical epoxy silicone acrylic polyurethane latex rubber nitrile neoprene viton epdm butyl hypalon kalrez chemraz aflas simriz perlast isolast markez zalak spectrasil".split(' ');
 
@@ -115,8 +120,11 @@ export function useTypingTest(duration: number = 60) {
         // Here we would dispatch stats to API
     };
 
+    const [keystrokeLogs, setKeystrokeLogs] = useState<{ char: string, timestamp: number }[]>([]);
+
     const handleInput = (e: React.ChangeEvent<HTMLInputElement> | string) => {
         const val = typeof e === 'string' ? e : e.target.value;
+        const now = Date.now();
 
         if (!isActive && !isFinished && val.length > 0) {
             startTest();
@@ -124,15 +132,22 @@ export function useTypingTest(duration: number = 60) {
 
         if (isFinished) return;
 
-        setInput(val);
-        calculateStats(val);
+        // Log Keystroke
+        if (val.length > input.length) {
+            const char = val.slice(-1);
+            setKeystrokeLogs(prev => [...prev, { char, timestamp: now }]);
+        }
 
-        // If text is completed, generate more
+        setInput(val);
+        // ... (rest of function)
+        calculateStats(val); // Re-added verify logic
+
         if (val.length >= text.length) {
-            // Ideally append more text but keeping it simple for MVP
             endTest();
         }
     };
+
+    // ... calculateStats ...
 
     const resetTest = () => {
         if (timerRef.current) clearInterval(timerRef.current);
@@ -140,6 +155,7 @@ export function useTypingTest(duration: number = 60) {
         setIsFinished(false);
         setInput("");
         setTimeLeft(duration);
+        setKeystrokeLogs([]); // Reset logs
         generateText();
         setStats({
             wpm: 0,
@@ -160,7 +176,9 @@ export function useTypingTest(duration: number = 60) {
         isActive,
         isFinished,
         stats,
+        keystrokeLogs,
         handleInput,
         resetTest
     };
 }
+

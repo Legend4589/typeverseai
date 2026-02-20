@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://typeverseai.vercel.app/sitemap.xml

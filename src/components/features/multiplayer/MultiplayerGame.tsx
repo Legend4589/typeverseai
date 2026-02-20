@@ -6,6 +6,7 @@ import TypingArea from '@/components/features/typing/TypingArea';
 import { subscribeToRoom, updateProgress, GameRoom, Player } from '@/lib/multiplayer';
 import { useAuth } from '@/context/AuthContext';
 import { Users, Trophy } from 'lucide-react';
+import { antiCheat } from '@/lib/anticheat';
 import Button from '@/components/common/Button';
 import { useRouter } from 'next/navigation';
 
@@ -29,6 +30,27 @@ export default function MultiplayerGame({ roomId }: MultiplayerGameProps) {
         handleInput,
         resetTest
     } = useTypingTest(60);
+
+    // Anti-Cheat Logging
+    useEffect(() => {
+        if (isActive && input.length > 0) {
+            const char = input[input.length - 1];
+            antiCheat.logKey(char);
+        }
+    }, [input, isActive]);
+
+    // Anti-Cheat Validation on Finish
+    useEffect(() => {
+        if (isFinished) {
+            const { isValid, suspicionScore, reason } = antiCheat.validate(input.length, (60 - timeLeft) * 1000);
+            if (!isValid) {
+                console.warn(`Anti-Cheat Flag: ${reason} (Score: ${suspicionScore})`);
+            } else {
+                console.log("Score validated cleanly.");
+            }
+            antiCheat.reset();
+        }
+    }, [isFinished, input.length, timeLeft]);
 
     // Subscribe to room updates
     useEffect(() => {

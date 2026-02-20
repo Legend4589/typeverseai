@@ -101,6 +101,8 @@ const TypingArea: React.FC<TypingAreaProps> = ({
                     autoComplete="off"
                     autoCorrect="off"
                     spellCheck="false"
+                    onPaste={(e) => { e.preventDefault(); }}
+                    onContextMenu={(e) => { e.preventDefault(); }}
                 />
             </div>
 

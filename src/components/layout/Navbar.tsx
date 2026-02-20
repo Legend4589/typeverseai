@@ -17,7 +17,6 @@ const Navbar = () => {
         { name: 'Games', href: '/games' },
         { name: 'Dashboard', href: '/dashboard' },
         { name: 'Leaderboard', href: '/leaderboard' },
-        { name: 'Pricing', href: '/pricing' },
     ];
 
     return (
