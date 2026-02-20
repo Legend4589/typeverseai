@@ -5,6 +5,8 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Button from '@/components/common/Button';
 import { CreditCard, Lock, CheckCircle } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 function CheckoutContent() {
     const searchParams = useSearchParams();
     const plan = searchParams.get('plan') || 'Pro';
