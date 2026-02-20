@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Button from '@/components/common/Button';
 import { CreditCard, Lock, CheckCircle } from 'lucide-react';
 
-export default function CheckoutPage() {
+function CheckoutContent() {
     const searchParams = useSearchParams();
     const plan = searchParams.get('plan') || 'Pro';
     const router = useRouter();
@@ -101,5 +101,13 @@ export default function CheckoutPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function CheckoutPage() {
+    return (
+        <Suspense fallback={<div className="container" style={{ paddingTop: '6rem', textAlign: 'center' }}>Loading checkout...</div>}>
+            <CheckoutContent />
+        </Suspense>
     );
 }
