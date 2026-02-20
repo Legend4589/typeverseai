@@ -21,9 +21,18 @@ export default function GameLobby() {
         if (!user) return;
 
         const initLobby = async () => {
-            // 1. Arcade Redirects (already handled, but safety check)
-            if (gameId === 'game-2') {
+            // 1. Arcade Redirects
+            if (gameId === 'game-1') {
+                router.push('/games/zombie-swipe');
+                return;
+            } else if (gameId === 'game-2') {
                 router.push('/games/word-rain');
+                return;
+            } else if (gameId === 'game-3') {
+                router.push('/games/speed-burst');
+                return;
+            } else if (gameId === 'game-4') {
+                router.push('/games/type-battle');
                 return;
             }
 
@@ -32,19 +41,14 @@ export default function GameLobby() {
                 setStatus('creating');
                 try {
                     const newRoomId = await createRoom(user.uid, user.email?.split('@')[0] || 'Player', gameId);
-                    // Redirect to the new room ID so other players can join this URL
-                    // But for now, let's just treat this current view AS the room for simplicity 
-                    // or better, redirect to /lobby/[newRoomId] to perform the 'join' logic there?
-                    // Let's redirect to ensure URL is shareable.
                     router.push(`/lobby/${newRoomId}`);
                 } catch (e) {
                     console.error(e);
                     setStatus('error');
                 }
             }
-            // 3. Join Room Logic (if it looks like a Room ID)
+            // 3. Join Room Logic
             else if (gameId.startsWith('-') || gameId.length > 10) {
-                // Firebase IDs usually start with - or are long
                 setStatus('joining');
                 setRoomId(gameId);
                 try {
@@ -58,10 +62,8 @@ export default function GameLobby() {
                     console.error(e);
                     setStatus('error');
                 }
-            }
-            else {
-                // Fallback for unknown IDs - maybe simulated for now?
-                // router.push(`/typing-test?mode=${gameId}`);
+            } else {
+                // Fallback
             }
         };
 

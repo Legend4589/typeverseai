@@ -8,12 +8,12 @@ import { Skull, Droplets, Zap, Swords } from 'lucide-react';
 export default function GamesPage() {
     const games = [
         {
-            id: 1,
-            title: "Zombie Swipe",
-            description: "Type words to kill zombies before they reach you.",
-            icon: <Skull size={48} color="#ff0055" />,
-            difficulty: "Hard",
-            color: "#ff0055"
+            id: 4,
+            title: "Type Battle",
+            description: "RPG style battle. Typing deals damage.",
+            icon: <Swords size={48} color="#7b2cbf" />,
+            difficulty: "Easy",
+            color: "#7b2cbf"
         },
         {
             id: 2,
@@ -24,20 +24,20 @@ export default function GamesPage() {
             color: "#00f3ff"
         },
         {
+            id: 1,
+            title: "Zombie Swipe",
+            description: "Type words to kill zombies before they reach you.",
+            icon: <Skull size={48} color="#ff0055" />,
+            difficulty: "Hard",
+            color: "#ff0055"
+        },
+        {
             id: 3,
             title: "Speed Burst",
             description: "60 seconds of pure adrenaline. No backspace allowed.",
             icon: <Zap size={48} color="#ffaa00" />,
             difficulty: "Extreme",
             color: "#ffaa00"
-        },
-        {
-            id: 4,
-            title: "Type Battle",
-            description: "RPG style battle. Typing deals damage.",
-            icon: <Swords size={48} color="#7b2cbf" />,
-            difficulty: "Easy",
-            color: "#7b2cbf"
         }
     ];
 

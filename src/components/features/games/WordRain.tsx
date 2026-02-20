@@ -30,6 +30,8 @@ export default function WordRainGame() {
     const [gameOver, setGameOver] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
 
+    const activeWordIndexRef = useRef<number>(-1);
+
     // Game state refs for loop access to avoid closure staleness
     const wordsRef = useRef<Word[]>([]);
     const scoreRef = useRef(0);
@@ -54,51 +56,67 @@ export default function WordRainGame() {
 
     const gameLoop = useCallback((timestamp: number) => {
         if (!canvasRef.current || livesRef.current <= 0) {
-            if (livesRef.current <= 0) setGameOver(true);
+            if (livesRef.current <= 0 && !gameOver) setGameOver(true);
             return;
         }
 
         const ctx = canvasRef.current.getContext('2d');
         if (!ctx) return;
 
-        // Clear canvas
         ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-        // Spawn words
+        // Spawn
         if (timestamp - lastSpawnRef.current > spawnRateRef.current) {
             spawnWord();
             lastSpawnRef.current = timestamp;
-            // Decrease spawn rate significantly to increase difficulty
             spawnRateRef.current = Math.max(500, 2000 - (scoreRef.current * 10));
         }
 
-        // Update and draw words
+        const currentInput = input;
+
         wordsRef.current.forEach((word, index) => {
             word.y += word.speed;
 
-            // Draw word
+            // Font settings
             ctx.font = '24px "Courier New", monospace';
-            ctx.fillStyle = '#00f3ff';
-            ctx.shadowColor = '#00f3ff';
-            ctx.shadowBlur = 10;
-            ctx.fillText(word.text, word.x, word.y);
-            ctx.shadowBlur = 0; // Reset shadow
 
-            // Check if word hit bottom
+            // Highlight logic
+            if (index === activeWordIndexRef.current) {
+                // Draw matched part
+                const matchedPart = word.text.substring(0, currentInput.length);
+                const remainingPart = word.text.substring(currentInput.length);
+
+                ctx.fillStyle = '#00ff00';
+                ctx.fillText(matchedPart, word.x, word.y);
+
+                ctx.fillStyle = '#00f3ff';
+                const matchWidth = ctx.measureText(matchedPart).width;
+                ctx.fillText(remainingPart, word.x + matchWidth, word.y);
+            } else {
+                ctx.fillStyle = '#00f3ff';
+                ctx.shadowColor = '#00f3ff';
+                ctx.shadowBlur = 10;
+                ctx.fillText(word.text, word.x, word.y);
+                ctx.shadowBlur = 0;
+            }
+
+            // Hit bottom
             if (word.y > canvasRef.current!.height) {
                 wordsRef.current.splice(index, 1);
                 livesRef.current -= 1;
                 setLives(livesRef.current);
+
+                if (index === activeWordIndexRef.current) {
+                    setInput('');
+                    activeWordIndexRef.current = -1;
+                } else if (index < activeWordIndexRef.current) {
+                    activeWordIndexRef.current -= 1;
+                }
             }
         });
 
-        // Highlight matching input
-        if (input) {
-            // Logic handled in useEffect for input
-        }
-
         frameRef.current = requestAnimationFrame(gameLoop);
-    }, [spawnWord, input]);
+    }, [spawnWord, input, gameOver]);
 
     useEffect(() => {
         if (gameStarted && !gameOver) {
@@ -124,13 +142,38 @@ export default function WordRainGame() {
     // Handle Input
     useEffect(() => {
         const checkInput = () => {
-            const matchIndex = wordsRef.current.findIndex(w => w.text === input);
-            if (matchIndex !== -1) {
-                // Word matched!
-                wordsRef.current.splice(matchIndex, 1);
-                scoreRef.current += 10;
-                setScore(scoreRef.current);
-                setInput(''); // Clear input
+            // If no active word, look for one starting with input
+            if (activeWordIndexRef.current === -1) {
+                if (input.length > 0) {
+                    let bestIndex = -1;
+                    let maxY = -100;
+
+                    wordsRef.current.forEach((w, i) => {
+                        if (w.text.startsWith(input)) {
+                            if (w.y > maxY) {
+                                maxY = w.y;
+                                bestIndex = i;
+                            }
+                        }
+                    });
+
+                    if (bestIndex !== -1) {
+                        activeWordIndexRef.current = bestIndex;
+                    }
+                }
+            } else {
+                // Check active word
+                const activeWord = wordsRef.current[activeWordIndexRef.current];
+                if (!activeWord || !activeWord.text.startsWith(input)) {
+                    activeWordIndexRef.current = -1;
+                } else if (activeWord.text === input) {
+                    // Word Complete!
+                    wordsRef.current.splice(activeWordIndexRef.current, 1);
+                    scoreRef.current += 10;
+                    setScore(scoreRef.current);
+                    setInput('');
+                    activeWordIndexRef.current = -1;
+                }
             }
         };
         checkInput();
