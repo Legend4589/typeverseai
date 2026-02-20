@@ -1,5 +1,6 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { Auth, getAuth } from 'firebase/auth';
+import { getDatabase, Database } from 'firebase/database';
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -7,7 +8,8 @@ const firebaseConfig = {
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL
 };
 
 // Check if keys are present
@@ -15,11 +17,13 @@ const isConfigured = firebaseConfig.apiKey && firebaseConfig.projectId;
 
 let app;
 let auth: Auth | undefined;
+let db: Database | undefined;
 
 if (isConfigured) {
     try {
         app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
         auth = getAuth(app);
+        db = getDatabase(app);
     } catch (e) {
         console.warn("Firebase initialization failed:", e);
     }
@@ -27,4 +31,4 @@ if (isConfigured) {
     console.warn("Firebase credentials missing. Auth disabled.");
 }
 
-export { auth };
+export { auth, db };
