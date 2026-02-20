@@ -38,6 +38,7 @@ export default function SpeedBurstGame() {
 
     // Auth Check
     useEffect(() => {
+        if (!auth) return;
         const unsubscribe = onAuthStateChanged(auth, (u) => setUser(u));
         return () => unsubscribe();
     }, []);

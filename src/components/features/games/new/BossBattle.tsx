@@ -132,7 +132,7 @@ export default function BossBattleGame() {
                 <TypingArea
                     text={text}
                     input={input}
-                    stats={stats}
+                    stats={{ wpm: stats.wpm, accuracy: stats.accuracy, timeLeft: 0 }}
                     isActive={isActive}
                     isFinished={isFinished || bossHp <= 0 || playerHp <= 0}
                     onInput={handleInput}

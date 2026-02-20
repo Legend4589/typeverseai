@@ -178,7 +178,8 @@ export function useTypingTest(duration: number = 60) {
         stats,
         keystrokeLogs,
         handleInput,
-        resetTest
+        resetTest,
+        setText
     };
 }
 

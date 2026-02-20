@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/common/Button';
-import { Skull, Heart, Clock, Zap } from 'lucide-react';
+import { Skull, Heart, Clock, Zap, RefreshCw } from 'lucide-react';
 import { useSound } from '@/context/SoundContext';
 
 interface Zombie {

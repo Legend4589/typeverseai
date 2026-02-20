@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/common/Button';
-import { DoorOpen, Ghost, Sword, Shield, Key } from 'lucide-react';
+import { DoorOpen, Ghost, Sword, Shield, Key, Crown, Skull } from 'lucide-react';
 import TypingArea from '@/components/features/typing/TypingArea';
 import { useTypingTest } from '@/hooks/useTypingTest';
 import { useSound } from '@/context/SoundContext';
-import { generateWords } from '@/lib/utils'; // Assuming we have utils, or I'll stub
+
 
 const ENCOUNTERS = [
     { type: 'enemy', name: 'Goblin Scout', hp: 50, words: 10, icon: Ghost, color: '#ffaa00' },
@@ -16,7 +16,7 @@ const ENCOUNTERS = [
     { type: 'boss', name: 'Dungeon Master', hp: 200, words: 50, icon: Crown, color: '#8000ff' }
 ] as const;
 
-import { Crown, Skull } from 'lucide-react';
+
 
 export default function TypingDungeonGame() {
     const router = useRouter();
@@ -97,7 +97,7 @@ export default function TypingDungeonGame() {
                         <TypingArea
                             text={text}
                             input={input}
-                            stats={stats}
+                            stats={{ wpm: stats.wpm, accuracy: stats.accuracy, timeLeft: 0 }}
                             isActive={isActive}
                             isFinished={isFinished}
                             onInput={handleInput}

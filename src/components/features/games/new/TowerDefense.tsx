@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@/components/common/Button';
 import { Shield, Skull, Zap } from 'lucide-react';
 import { useSound } from '@/context/SoundContext';
-import { generateWords } from '@/lib/utils'; // Assuming or mocking
+
 
 const WORDS = ["defend", "guard", "shield", "protect", "wall", "tower", "laser", "cannon", "blast", "shot", "fire", "ice", "bolt", "shock", "boom", "zap"];
 
@@ -63,6 +63,7 @@ export default function TowerDefenseGame() {
         }
 
         const ctx = canvasRef.current.getContext('2d');
+        if (!ctx) return;
         const width = canvasRef.current.width;
         const height = canvasRef.current.height;
         const laneWidth = width / 4;

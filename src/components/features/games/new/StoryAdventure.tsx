@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@/components/common/Button';
 import { BookOpen, Map, Compass } from 'lucide-react';
 import { useSound } from '@/context/SoundContext';
-import Typist from 'react-typist'; // We might not have this installed, so I'll write a simple typewriter effect hook/component
+
 
 const HelperTypewriter = ({ text, onComplete }: { text: string, onComplete?: () => void }) => {
     const [displayed, setDisplayed] = useState('');

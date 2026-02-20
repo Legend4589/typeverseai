@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import { adminAuth, adminDb } from '@/lib/firebase-admin'; // We need a firebase-admin init
+
 // Since we might not have firebase-admin set up yet, let's stick to client-side auth verification or standard firebase for now
 // Actually, for a secure API route, we need firebase-admin to verify the ID token.
 // IF firebase-admin is not available, we'll mark it as a TODO or use a mock validation for this prototype.

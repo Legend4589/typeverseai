@@ -111,7 +111,7 @@ export default function TimeWarpGame() {
                 <TypingArea
                     text={text}
                     input={input}
-                    stats={stats}
+                    stats={{ wpm: stats.wpm, accuracy: stats.accuracy, timeLeft: 0 }}
                     isActive={isActive}
                     isFinished={isFinished || displayTime <= 0}
                     onInput={handleInput}
